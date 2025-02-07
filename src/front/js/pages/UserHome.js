@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { FaShare, FaCopy } from "react-icons/fa";  // Usamos los nuevos iconos de react-icons
+import { FaShare, FaCopy } from "react-icons/fa";
+import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
 import NavbarHeader from "../component/NavbarHeader.jsx";
 import ContactBanner from "../component/ContactBanner.jsx";
 import NavbarFooter from "../component/NavbarFooter.jsx";
-import UserQrCard from "../component/UserQrCard.jsx"; // Se asume que este componente se encuentra en la misma carpeta
+import UserQrCard from "../component/UserQrCard.jsx";
 import "../../styles/userHome.css";
+
 const UserHome = () => {
   const { actions, store } = useContext(Context);
   const navigate = useNavigate();
   const [lastQr, setLastQr] = useState(null);
+
   useEffect(() => {
     const localToken = localStorage.getItem("authToken");
     if (!localToken || localToken === "null" || localToken === "undefined" || localToken.trim() === "") {
@@ -20,10 +23,11 @@ const UserHome = () => {
       fetchLastQr();
     }
   }, [navigate]);
+
   const fetchLastQr = async () => {
     try {
       const token = localStorage.getItem("authToken");
-      const userId = 1; // Por ahora hardcodeado como antes
+      const userId = 1;
       const BACKEND_URL = process.env.BACKEND_URL;
       const response = await fetch(`${BACKEND_URL}api/user/${userId}/qrcodes`, {
         headers: {
@@ -33,27 +37,60 @@ const UserHome = () => {
       if (!response.ok) throw new Error('Error al obtener QRs');
       const data = await response.json();
       if (data.success && data.qr_codes.length > 0) {
-        setLastQr(data.qr_codes[0]); // Tomamos el primer QR (el más reciente)
+        setLastQr(data.qr_codes[0]);
       }
     } catch (error) {
       console.log("Error al obtener el último QR");
     }
   };
+
   const handleNavigation = (path) => {
-    navigate(path); // Navega a la ruta especificada
+    navigate(path, { state: { qrData: lastQr } });
   };
+
   const handleLogOut = () => {
     console.log("Cerrando Sesión");
     localStorage.removeItem("authToken");
     actions.logout();
     navigate("/login", { replace: true });
   };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
-    const year = date.getFullYear().toString().slice(2); // Obtener solo las dos últimas cifras del año
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear().toString().slice(2);
     return `${day}/${month}/${year}`;
+  };
+
+  const handleCopy = async () => {
+    if (lastQr && lastQr.data) {
+      try {
+        const scannerDiv = document.createElement('div');
+        scannerDiv.id = 'reader';
+        scannerDiv.style.display = 'none';
+        document.body.appendChild(scannerDiv);
+
+        const html5QrCode = new Html5Qrcode("reader");
+
+        const response = await fetch(lastQr.data);
+        const blob = await response.blob();
+        const file = new File([blob], "qr.png", { type: "image/png" });
+
+        try {
+          const decodedText = await html5QrCode.scanFile(file, true);
+          const jsonData = JSON.parse(decodedText);
+          await navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2));
+          alert("Contenido del QR copiado exitosamente");
+        } finally {
+          html5QrCode.clear();
+          document.body.removeChild(scannerDiv);
+        }
+
+      } catch (error) {
+        console.log("Error al procesar y copiar el QR:", error);
+      }
+    }
   };
   return (
     <div className="user-home-container">
@@ -77,7 +114,7 @@ const UserHome = () => {
               <button className="share-button" onClick={() => handleNavigation('/share')}>
                 <FaShare />
               </button>
-              <button className="copy-button">
+              <button className="copy-button" onClick={handleCopy}>
                 <FaCopy />
               </button>
             </div>
@@ -89,4 +126,5 @@ const UserHome = () => {
     </div>
   );
 };
+
 export default UserHome;

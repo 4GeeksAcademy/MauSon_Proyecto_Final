@@ -2,6 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { FaArrowLeft, FaBars, FaHome, FaUser, FaQrcode, FaHistory, FaCheck, FaCalendarAlt } from "react-icons/fa";
+import NavbarHeader from "../component/NavbarHeader.jsx";
+import ContactBanner from "../component/ContactBanner.jsx";
+import NavbarFooter from "../component/NavbarFooter.jsx";
 import "../../styles/QrGenerator.css";
 
 const isValidDate = (dateStr) => {
@@ -352,7 +355,7 @@ const QrGenerator = () => {
             console.log("Se produjo un error en el proceso del QR grupal");
             setLocalError("No se pudo completar la operación. Por favor, intente nuevamente.");
          } finally {
-            setIsLoading(false);
+            setIsLoading(false); y
          }
       }
    };
@@ -373,16 +376,7 @@ const QrGenerator = () => {
 
    return (
       <div className="qr-generator-container">
-         <header className="top-navbar">
-            <button className="nav-button" onClick={handleLogout}>
-               <FaArrowLeft />
-            </button>
-            <h1>QR Generator</h1>
-            <button className="nav-button" onClick={() => navigate("/")}>
-               <FaBars />
-            </button>
-         </header>
-
+         <NavbarHeader />
          <main className="main-content">
             <QrCard
                formData={formData}
@@ -397,22 +391,10 @@ const QrGenerator = () => {
                isLoading={isLoading}
             />
          </main>
-
-         <nav className="bottom-nav">
-            <button className="nav-item" onClick={() => navigate("/userhome")}>
-               <FaHome />
-            </button>
-            <button className="nav-item" onClick={() => navigate("/userinfo")}>
-               <FaUser />
-            </button>
-            <button className="nav-item active">
-               <FaQrcode />
-            </button>
-            <button className="nav-item" onClick={() => navigate("/history")}>
-               <FaHistory />
-            </button>
-         </nav>
+         <ContactBanner />
+         <NavbarFooter />
       </div>
+
    );
 };
 
