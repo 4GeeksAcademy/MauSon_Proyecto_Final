@@ -1,7 +1,7 @@
 import React from "react";
 import { IoHome, IoPerson, IoQrCode, IoTime } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import '../../styles/userView/navbarFooter.css';
+import '../../styles/navbarFooter.css';
 
 const NavbarFooter = () => {
   const navigate = useNavigate(); // Usamos el hook useNavigate para cambiar de ruta

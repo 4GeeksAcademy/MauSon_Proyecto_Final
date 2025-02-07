@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			activeContactId: null, // Inicializo el contacto activo
 			contactToEdit: null, // Inicializo el contacto a editar
 			UserImages: [], //inicializo el array de imagenes aleatorias
-			qr_codes: [], // Inicializo el array de códigos QR
+			qr_codes: [],
+			qrCodesLoaded: false,
 
 		},
 		actions: {
@@ -50,76 +51,79 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Use getActions to call a function within a fuction
 			login: async (email, password) => {
 				try {
-					const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ email, password }),
-					});
-
-					if (resp.ok) {
-						const token = await resp.text();
-						localStorage.setItem("authToken", token);
-						setStore({ authToken: token });
-
-						// Llamamos a la nueva acción para cargar los datos del usuario después de hacer login
-						await getActions().loadUser();
-
-						return { success: true, message: "Login exitoso" };
-					} else {
-						const error = await resp.json();
-						return { success: false, message: error.message || "Error en el login" };
-					}
+				  const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email, password }),
+				  });
+			  
+				  if (resp.ok) {
+					const token = await resp.text();
+					localStorage.setItem("authToken", token);
+					setStore({ authToken: token });
+			  
+					// Llamamos a la nueva acción para cargar los datos del usuario después de hacer login
+					await getActions().loadUser();
+			  
+					return { success: true, message: "Login exitoso" };
+				  } else {
+					const error = await resp.json();
+					return { success: false, message: error.message || "Error en el login" };
+				  }
 				} catch (err) {
-					console.error("Error en login:", err);
-					return { success: false, message: "Error de conexión" };
+				  console.error("Error en login:", err);
+				  return { success: false, message: "Error de conexión" };
 				}
-			},
-
-			// Función loadUser en el frontend
-			loadUser: async () => {
+			  },
+			  
+			  // Función loadUser en el frontend
+			  loadUser: async () => {
 				const store = getStore();
-
+			  
 				// Imprime el estado de store.user para verificar si está correcto
 				console.log("Estado de store.user antes de cargar el usuario:", store.user);
-
+			  
 				if (!store.authToken) {
-					console.error("Token JWT no disponible");
-					return;
+				  console.error("Token JWT no disponible");
+				  return;
 				}
-
+			  
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${store.authToken}`, // Usamos el token JWT para la autorización
-						},
-					});
-
-					if (response.ok) {
-						// Al recibir la respuesta, parseamos los datos
-						const user = await response.json();
-						console.log("Datos del usuario cargados:", user);
-
-						setStore({ user: user });  // Actualizamos el store con los datos del usuario
-
-						// Verifica los valores antes de hacer la comparación
-						console.log("store.user.id:", store.user.id);
-						console.log("user.id del backend:", user.id);
-
-						// Verificamos que el user_id corresponda al del usuario logeado
-						if (user.id === store.user.id) {
-							console.log("Usuario cargado correctamente");
-						} else {
-							console.error("Los datos del usuario no coinciden con el usuario logeado");
-						}
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
+					method: "GET",
+					headers: {
+					  "Content-Type": "application/json",
+					  "Authorization": `Bearer ${store.authToken}`, // Usamos el token JWT para la autorización
+					},
+				  });
+			  
+				  if (response.ok) {
+					// Al recibir la respuesta, parseamos los datos
+					const user = await response.json();
+					console.log("Datos del usuario cargados:", user);
+			  
+					setStore({ user: user });  // Actualizamos el store con los datos del usuario
+			  
+					// Guardamos el usuario en sessionStorage
+					sessionStorage.setItem("user", JSON.stringify(user)); // Guardamos el objeto completo en sessionStorage
+			  
+					// Verifica que el user.id esté correctamente asignado
+					console.log("store.user.id:", store.user.id);
+					console.log("user.id del backend:", user.id);
+			  
+					// Verificamos que el user_id corresponda al del usuario logeado
+					if (user.id === store.user.id) {
+					  console.log("Usuario cargado correctamente");
 					} else {
-						console.error("Error al cargar el usuario");
+					  console.error("Los datos del usuario no coinciden con el usuario logeado");
 					}
+				  } else {
+					console.error("Error al cargar el usuario");
+				  }
 				} catch (error) {
-					console.error("Error al cargar el usuario:", error);
+				  console.error("Error al cargar el usuario:", error);
 				}
-			},
+			  },
 
 			logout: () => {
 				localStorage.removeItem("authToken");  // Eliminamos el token del localStorage
@@ -521,7 +525,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			loadRandomImgs: async () => {
 				console.log("Intentando cargar imagenes aleatorias...");
-
 				try {
 					const response = await fetch("https://randomuser.me/api/?inc=picture&results=100");
 
@@ -546,37 +549,44 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Acción para cargar todos los códigos QR del usuario
 			loadQrCodes: async () => {
 				const store = getStore();
-
+			  
+				console.log("Llamando a loadQrCodes..."); // Verifica cada vez que se llama esta función
+			  
 				if (!store.authToken) {
-					console.error("Token JWT no disponible");
-					return;
+				  console.error("Token JWT no disponible");
+				  return;
 				}
-
+			  
+				// Verificamos si los QR Codes ya fueron cargados
+				if (store.qrCodesLoaded) {
+				  console.log("QR Codes ya fueron cargados. No se ejecuta nuevamente.");
+				  return;
+				}
+			  
 				try {
-					// Hacemos la solicitud para obtener los códigos QR
-					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${store.user.id}/qrcodes`, {
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${store.authToken}`,  // Enviamos el token JWT para autenticar al usuario
-						},
-					});
-
-					if (response.ok) {
-						const qrCodes = await response.json();
-						console.log("QR Codes cargados:", qrCodes);
-
-						// Filtramos los QR para asegurarnos de que estamos obteniendo solo los de este usuario
-						const userQrCodes = qrCodes.qr_codes || [];
-						setStore({ qr_codes: userQrCodes });
-					} else {
-						console.error("Error al cargar los códigos QR");
-					}
+				  // Hacemos la solicitud para obtener los códigos QR
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/user/${store.user.id}/qrcodes`, {
+					method: "GET",
+					headers: {
+					  "Content-Type": "application/json",
+					  "Authorization": `Bearer ${store.authToken}`, // Usamos el token JWT para autenticar al usuario
+					},
+				  });
+			  
+				  if (response.ok) {
+					const qrCodes = await response.json();
+					console.log("QR Codes cargados:", qrCodes);
+			  
+					// Filtramos los QR para asegurarnos de que estamos obteniendo solo los de este usuario
+					const userQrCodes = qrCodes.qr_codes || [];
+					setStore({ qr_codes: userQrCodes, qrCodesLoaded: true });  // Actualizamos el flag
+				  } else {
+					console.error("Error al cargar los códigos QR");
+				  }
 				} catch (error) {
-					console.error("Error al cargar los códigos QR:", error);
+				  console.error("Error al cargar los códigos QR:", error);
 				}
-			},
-
+			  },
 		},
 	};
 };

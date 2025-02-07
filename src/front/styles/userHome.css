@@ -1,8 +1,49 @@
-/* Contenedor principal */
-.user-home-container {
+/* Contenedor principal para toda la vista */
+.view-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  width: 100%; /* Ocupa todo el ancho */
+  padding: 0;
+  margin: 0;
+}
+
+/* El header tiene un alto fijo de 70px */
+.view-header {
+  position: sticky;
+  top: 0;
+  height: 70px; /* Alto fijo para el header */
+  z-index: 10;
+  width: 100%; /* Ocupa todo el ancho */
+}
+
+/* Aseguramos que el view-body ocupe el espacio restante */
+.view-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 20px;
+  overflow-y: auto;
+  flex-grow: 1; /* Esto permite que el body ocupe el espacio restante */
+  margin: 0;
+}
+
+/* Aseguramos que el banner esté pegado al footer */
+.view-banner {
+  background-color: #f8f9fa; /* Fondo claro para el banner */
+  height: 100px;  /* Altura fija para el banner */
+  width: 100%; /* Asegura que el banner ocupe todo el ancho */
+  margin-bottom: 0; /* El banner está pegado al footer */
+}
+
+/* Footer con altura de 50px */
+.view-footer {
+  background-color: #f8f9fa; /* Fondo claro para el footer */
+  height: 50px;  /* Altura fija para el footer */
+  width: 100%;  /* Asegura que el footer ocupe todo el ancho */
+  position: relative;
+  margin-top: 0;  /* Asegura que no haya espacio entre el footer y el banner */
 }
 
 /* Contenedor de contenido */
@@ -13,10 +54,10 @@
   align-items: center; /* Centrado horizontal */
   flex-grow: 0; /* No crecer más allá de la altura que se le asigna */
   height: 548px; /* Altura específica */
-  padding: 0 20px; /* Eliminamos el margen superior y agregamos solo padding horizontal */
+  padding: 0 5px; /* Eliminamos el margen superior y agregamos solo padding horizontal */
   background-color: white;
   overflow-y: auto; /* Permite el desplazamiento si el contenido es más largo */
-  margin-top: 70px; /* Alinea el contenido pegado al navbarHeader */
+  margin-top: 10px; /* Alinea el contenido pegado al navbarHeader */
 }
 
 /* Ajustar la caja del QR info card */
@@ -83,16 +124,4 @@
 
 .share-button:hover, .copy-button:hover {
   transform: scale(1.1);
-}
-
-/* Estilos para el ContactBanner y NavbarFooter */
-.contact-banner {
-  margin-top: 30px; /* Separación después del contenido */
-}
-
-.navbar-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  left: 0;
 }

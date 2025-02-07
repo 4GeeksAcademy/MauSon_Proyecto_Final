@@ -75,10 +75,12 @@
 	"dependencies": {
 		"babel": "^5.8.38",
 		"bootstrap": "^5.3.3",
+		"html5-qrcode": "^2.3.8",
 		"i18n": "^0.15.1",
 		"i18next": "^24.2.1",
 		"i18next-http-backend": "^3.0.1",
 		"jwt-decode": "^4.0.0",
+		"pako": "^2.1.0",
 		"prop-types": "^15.6.1",
 		"qrcode.react": "^4.2.0",
 		"react": "^16.8.4",
