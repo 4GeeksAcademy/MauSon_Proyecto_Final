@@ -1,39 +1,68 @@
-/* Contenedor principal */
-.qr-history-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Ocupa toda la altura de la ventana */
+/* Contenedor principal para toda la vista */
+.view-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  width: 100%; /* Ocupa todo el ancho */
+  padding: 0;
+  margin: 0;
+}
+
+/* El header tiene un alto fijo de 70px */
+.view-header {
+  position: sticky;
+  top: 0;
+  height: 70px; /* Alto fijo para el header */
+  z-index: 10;
+  width: 100%; /* Ocupa todo el ancho */
+}
+
+/* Aseguramos que el view-body ocupe el espacio restante */
+.view-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 20px;
+  overflow-y: auto;
+  flex-grow: 1; /* Esto permite que el body ocupe el espacio restante */
+  margin: 0; /* Sin márgenes para ajustarse bien */
+}
+
+/* Eliminamos márgenes y paddings */
+.view-header, .view-footer {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Banner fuera del layout */
+.view-banner {
+  background-color: #f8f9fa; /* Fondo claro para el banner */
+  height: 100px;  /* Altura fija para el banner */
+  width: 100%; /* Asegura que el banner ocupe todo el ancho */
+  position: absolute;
+  bottom: 50px; /* Pegado al fondo */
+  left: 0;
+}
+
+/* Footer con altura de 50px */
+.view-footer {
+  background-color: #f8f9fa; /* Fondo claro para el footer */
+  height: 50px;  /* Altura fija para el footer */
+  width: 100%;  /* Asegura que el footer ocupe todo el ancho */
+  position: relative;
+  bottom: 0; /* Asegura que el footer quede en la parte inferior */
+  margin-top: 0;  /* Asegura que no haya espacio entre el footer y el banner */
+}
+
+/* Estilos del banner y footer en pantallas pequeñas */
+@media (max-width: 768px) {
+  .view-banner {
+    height: 100px; /* Puedes ajustar el tamaño del banner en pantallas pequeñas */
   }
-  
-  /* Contenedor de contenido */
-  .qr-history-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centrado vertical */
-    align-items: center; /* Centrado horizontal */
-    flex-grow: 1; /* Toma todo el espacio disponible entre el header y el footer */
-    text-align: center; /* Centrar el texto */
-    padding: 20px; /* Espaciado alrededor del contenido */
+
+  .view-footer {
+    height: 50px; /* Puedes ajustar la altura del footer en pantallas pequeñas */
   }
-  
-  .qr-history-content h1 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-  }
-  
-  .qr-history-content p {
-    font-size: 1.2rem;
-    color: #6c757d;
-  }
-  
-  @media (min-width: 768px) {
-    .navbar-header,
-    .navbar-footer,
-    .contact-banner {
-      max-width: 100%;
-    }
-  
-    .qr-history-content {
-      margin-bottom: 160px;
-    }
-  }
+}

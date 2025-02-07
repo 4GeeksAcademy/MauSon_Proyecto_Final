@@ -1,204 +1,146 @@
-/* General */
-body {
-    font-family: "Arial", sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
+.view-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
-/* Contenedor principal del body */
-.contact-body {
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    padding-top: 5px; /* Espacio superior */
+.view-header {
+  position: sticky;
+  top: 0;
+  height: 70px; 
+  z-index: 10;
+  width: 100%; 
 }
 
-/* Contenedor de las Tabs (debe estar debajo del navbarHeader) */
-.contact-tabs {
-    width: 100%;
-    max-width: 375px;
-    display: flex;
-    justify-content: flex-start;
-    overflow-x: auto;
-    background: white;
-    border-bottom: 2px solid #ddd;
-    margin-top: 20px; /* Espacio desde el navbarHeader */
+.view-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 10px;
+  overflow-y: auto;
+  flex-grow: 1; /* Esto permite que el body ocupe el espacio restante */
 }
 
-/* Estilo de cada pestaña */
-.contact-tab {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    font-size: 14px;
-    color: #333;
-    background: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-    white-space: nowrap;
+.view-banner {
+  background-color: #f8f9fa;
+  height: 100px;
+  width: 100%;
+  margin-bottom: 0;
 }
 
-/* Espacio entre icono y texto en la tab */
-.contact-tab .tab-text {
-    margin-left: 8px;
-}
 
-/* Tab activa */
-.contact-tab.active {
-    background-color: #525aa6;
-    color: white;
-}
-
-/* Hover de las pestañas */
-.contact-tab:hover {
-    background-color: #e0e0e0;
-}
-
-/* Contenido del cuerpo debajo de las Tabs */
-.body-content {
-    width: 100%;
-    max-width: 375px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
-}
-
-/* Banner Publicitario - Fijo encima del footer */
-.contact-banner {
-    position: fixed;
-    bottom: 50px; /* Se coloca 3px encima del navbar-footer */
-    width: 100%;
-    max-width: 375px;
-    height: 100px;
-    background-color: #ddd;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Espaciado entre banner y navbar-footer */
-.contact-banner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Responsivo */
-@media (min-width: 768px) {
-    .navbar-header,
-    .navbar-footer,
-    .contact-banner {
-        max-width: 100%;
-    }
-
-    .contact-body {
-        margin-bottom: 160px;
-    }
-
-    .header-content {
-        max-width: 600px;
-    }
+.view-footer {
+  background-color: #f8f9fa;
+  height: 50px;
+  width: 100%;
+  position: relative;
+  margin-top: 0;
 }
 
 /* Botón principal de crear */
 .create-contact-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #525aa6;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease-in-out;
-    margin-top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #525aa6;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease-in-out;
+  margin-top: 20px;
 }
 
 /* Hover del botón */
 .create-contact-btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Ícono "+" dentro del botón */
 .create-contact-btn .plus-icon {
-    font-size: 22px;
+  font-size: 22px;
 }
 
 /* Estilos para los otros botones de editar y borrar */
 /* Botón principal de crear */
 .create-contact-btn, .edit-contact-btn, .delete-contact-btn {
-    width: 60px;  /* Tamaño del botón */
-    height: 60px;
-    border-radius: 50%; /* Redondeamos el botón */
-    background-color: #525aa6;  /* Color de fondo */
-    color: white;
-    display: flex;
-    justify-content: center;  /* Centrar los íconos */
-    align-items: center;
-    font-size: 24px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease-in-out;
-    margin: 10px;  /* Espaciado entre los botones */
+  width: 60px;  /* Tamaño del botón */
+  height: 60px;
+  border-radius: 50%; /* Redondeamos el botón */
+  background-color: #525aa6;  /* Color de fondo */
+  color: white;
+  display: flex;
+  justify-content: center;  /* Centrar los íconos */
+  align-items: center;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease-in-out;
+  margin: 10px;  /* Espaciado entre los botones */
 }
 
 /* Hover de los botones */
 .create-contact-btn:hover, .edit-contact-btn:hover, .delete-contact-btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Colores específicos para cada tipo de botón */
 .edit-contact-btn {
-    background-color: #f0ad4e;  /* Color amarillo para Editar */
+  background-color: #f0ad4e;  /* Color amarillo para Editar */
 }
 
 .delete-contact-btn {
-    background-color: #d9534f;  /* Color rojo para Borrar */
+  background-color: #d9534f;  /* Color rojo para Borrar */
 }
 
 /* Hover de los botones */
 .edit-contact-btn:hover {
-    background-color: #ec971f;
+  background-color: #ec971f;
 }
 
 .delete-contact-btn:hover {
-    background-color: #c9302c;
+  background-color: #c9302c;
 }
 
 /* Íconos dentro de los botones */
 .create-contact-btn .plus-icon,
 .edit-contact-btn .edit-icon,
 .delete-contact-btn .delete-icon {
-    font-size: 28px; /* Tamaño del ícono */
-    font-weight: bold;  /* Asegura que el ícono esté centrado */
+  font-size: 28px; /* Tamaño del ícono */
+  font-weight: bold;  /* Asegura que el ícono esté centrado */
 }
 
 /* Asegurarnos de que los botones se vean bien en pantallas pequeñas */
 @media (max-width: 768px) {
-    .create-contact-btn, .edit-contact-btn, .delete-contact-btn {
-        width: 50px;  /* Reducir el tamaño en pantallas pequeñas */
-        height: 50px;
-        font-size: 20px;
-    }
+  .create-contact-btn, .edit-contact-btn, .delete-contact-btn {
+      width: 50px;  /* Reducir el tamaño en pantallas pequeñas */
+      height: 50px;
+      font-size: 20px;
+  }
 
-    .create-contact-btn .plus-icon,
-    .edit-contact-btn .edit-icon,
-    .delete-contact-btn .delete-icon {
-        font-size: 22px; /* Reducir el tamaño de los íconos */
-    }
+  .create-contact-btn .plus-icon,
+  .edit-contact-btn .edit-icon,
+  .delete-contact-btn .delete-icon {
+      font-size: 22px; /* Reducir el tamaño de los íconos */
+  }
+}
+
+/* Contenido del cuerpo debajo de las Tabs */
+.body-content {
+  width: 100%;
+  max-width: 375px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
 }

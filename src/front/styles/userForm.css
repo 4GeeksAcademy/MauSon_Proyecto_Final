@@ -1,94 +1,111 @@
-/* Contenedor principal */
-.user-form {
+/* userForm.css */
+.view-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
-/* Header fijo con el Navbar */
-.user-form-header {
+.view-header {
   position: sticky;
   top: 0;
+  height: 70px; /* Altura del navbar */
+  z-index: 10;
   width: 100%;
-  z-index: 100; /* Asegura que el navbar siempre esté arriba */
-  background: white;
-}
-
-/* Pestañas más pequeñas y en la misma fila */
-.user-form-tabs {
-  position: sticky;
-  top: 56px; /* Justo debajo del Navbar */
-  width: 100%;
-  background: white;
-  z-index: 99;
-  border-bottom: 2px solid #ddd;
-}
-
-/* Pestañas alineadas en fila */
-.tabs-row {
+  background-color: #f8f9fa; /* Fondo claro para el header */
+  
+  /* Ajustes para flex */
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  padding: 10px 0;
-  font-size: 14px;
+  align-items: center; /* Alinea verticalmente el contenido dentro del header */
+  justify-content: space-between; /* Opcional, ajusta el contenido dentro del header */
 }
 
-/* Ajuste de tamaño de pestañas */
-.tabs-row .nav-link {
-  padding: 6px 12px;
-  font-size: 14px;
-}
-
-/* Contenedor del formulario */
-.user-form-body {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 20px 10px; /* Añade padding a los lados */
+.view-body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  flex-grow: 1;
+  margin: 0;
+  padding-top: 80px; /* Ajustamos el margen superior para evitar que se solape con el header */
+  padding-bottom: 150px; /* Reservamos espacio para el footer */
 }
 
-/* Contenedor del formulario con un ancho máximo */
-.user-form-container {
+.view-banner {
+  background-color: #f8f9fa;
+  height: 100px;
   width: 100%;
-  padding: 15px;
-  background: white;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-/* Botón "Actualizar" centrado */
-.button-container {
+.view-footer {
+  background-color: #f8f9fa;
+  height: 50px;
+  width: 100%;
+  position: relative;
+  margin-top: auto;
+  padding: 0;
+}
+
+/* Ajuste de estilo para las pestañas */
+.tabs-row {
   display: flex;
   justify-content: center;
-  padding: 10px;
-  background: white;
-}
-/* Estilo para el botón de crear */
-.create-button {
-  background-color: green;  /* Fondo verde */
-  color: white;  /* Color de texto blanco */
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 20px;
+  padding: 0;
 }
 
-/* Estilo para el botón de actualizar */
-.update-button {
-  background-color: #525aa6;  /* Fondo azul */
-  color: white;  /* Color de texto blanco */
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 140px;
-  transition: background-color 0.3s ease;
+.tabs-row .nav-item {
+  flex: 1; /* Hace que todas las pestañas tengan el mismo tamaño */
 }
 
-/* Hover efecto para ambos botones */
-.create-button:hover, .update-button:hover {
-  opacity: 0.8;
+.tabs-row .nav-link {
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  text-align: center;
+  margin: 0;
+  color: #525aa6;
+}
+
+.tabs-row .nav-link.active-tab {
+  border-bottom: 2px solid #525aa6; /* Línea debajo de la pestaña activa */
+  color: #525aa6;
+}
+
+.tabs-row .nav-link:hover {
+  border-bottom: 2px solid #525aa6;
+}
+
+/* Separar las pestañas de otros componentes */
+.user-form-tabs {
+  margin-top: 5px; /* Un pequeño margen para separar las pestañas del header */
+}
+
+/* Asegura márgenes en la parte inferior de la pestaña */
+.view-body-content {
+  margin-bottom: 20px;
+}
+
+/* Botón centrado */
+button {
+  width: 100%;
+  max-width: 200px;
+  display: block;
+  margin: 0 auto;
+}
+
+button.update-button {
+  background-color: #525aa6;
+  color: white;
+}
+
+button.create-button {
+  background-color: #007bff;
+  color: white;
 }

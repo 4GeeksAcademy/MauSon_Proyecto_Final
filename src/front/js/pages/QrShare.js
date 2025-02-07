@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import NavbarHeader from "../component/NavbarHeader.jsx";
-import ContactBanner from "../component/ContactBanner.jsx";
+import ContactBanner from "../component/Banner.jsx";
 import NavbarFooter from "../component/NavbarFooter.jsx";
 import { FaArrowLeft, FaBars, FaHome, FaUser, FaQrcode, FaHistory, FaCheck } from "react-icons/fa";
 import "../../styles/QrShare.css";

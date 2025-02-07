@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Tab, Nav, Button, Container } from "react-bootstrap";
+import { Tab, Nav, Row, Button, Container } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Context } from "../store/appContext";
 import NavbarHeader from "../component/NavbarHeader.jsx";
-import UserContactForm from "../component/UserContactForm.jsx";
-import SensitiveDataForm from "../component/SensitiveDataForm.jsx";
+import UserContactForm from "../component/FormPersonal.jsx";
+import SensitiveDataForm from "../component/FormSensitive.jsx";
+import ContactBanner from "../component/Banner.jsx";
+import NavbarFooter from "../component/NavbarFooter.jsx";
 import "../../styles/userForm.css";
 
 const UserForm = () => {
@@ -13,7 +15,6 @@ const UserForm = () => {
   const location = useLocation();
   const [key, setKey] = useState("contact");
 
-  // Separate states for contact data and edit mode
   const [formData, setFormData] = useState({
     nombre: "",
     primer_apellido: "",
@@ -91,47 +92,69 @@ const UserForm = () => {
   };
 
   return (
-    <div className="user-form">
-      <div className="user-form-header">
-        <NavbarHeader prevLocation={location.state?.from} />
-      </div>
+    <div className="view-container">
+      <Container fluid className="d-flex flex-column p-0 m-0 h-100">
+        <Row className="view-header sticky-top g-0">
+          <NavbarHeader prevLocation={location.state?.from} />
+        </Row>
 
-      <div className="user-form-tabs">
-        <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
-          <Nav variant="pills" className="tabs-row">
-            <Nav.Item>
-              <Nav.Link eventKey="contact">Datos de Contacto</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="sensitive">Datos Sensibles</Nav.Link>
-            </Nav.Item>
-          </Nav>
+        <Row className="view-body m-0 p-0 
+        g-0">
+          <Row className="view-body-content m-0 p-0 g-0">
+            <div className="user-form-tabs">
+              <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
+                <Nav className="tabs-row">
+                  <Nav.Item>
+                    <Nav.Link eventKey="contact" className={key === 'contact' ? 'active-tab' : ''}>
+                      Datos Personales
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="sensitive" className={key === 'sensitive' ? 'active-tab' : ''}>
+                      Datos Sensibles
+                    </Nav.Link>
+                  </Nav.Item>
+                </Nav>
 
-          <Tab.Content>
-            <Tab.Pane eventKey="contact">
-              <UserContactForm
-                contactData={formData}
-                setContactForm={setFormData}
-                isEditing={isEditing}
-              />
-            </Tab.Pane>
-            <Tab.Pane eventKey="sensitive">
-              <SensitiveDataForm
-                sensitiveData={sensitiveFormData}
-                setSensitiveData={setSensitiveFormData}
-              />
-            </Tab.Pane>
-          </Tab.Content>
-        </Tab.Container>
-      </div>
+                <Tab.Content>
+                  <Tab.Pane eventKey="contact">
+                    <UserContactForm
+                      contactData={formData}
+                      setContactForm={setFormData}
+                      isEditing={isEditing}
+                    />
+                    <div className="d-flex justify-content-center mt-3">
+                      <Button onClick={() => setKey('sensitive')}>Siguiente</Button>
+                    </div>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="sensitive">
+                    <SensitiveDataForm
+                      sensitiveData={sensitiveFormData}
+                      setSensitiveData={setSensitiveFormData}
+                    />
+                    <div className="d-flex justify-content-center mt-3">
+                      <Button
+                        className={isEditing ? "update-button" : "create-button"}
+                        onClick={handleSave}
+                      >
+                        {isEditing ? "Actualizar" : "Guardar"}
+                      </Button>
+                    </div>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </div>
+          </Row>
 
-      <Container className="button-container">
-        <Button
-          className={isEditing ? "update-button" : "create-button"}
-          onClick={handleSave}
-          >
-          {isEditing ? "Actualizar" : "Guardar"}
-        </Button>
+        </Row>
+
+        <Row className="view-banner m-0 g-0">
+          <ContactBanner />
+        </Row>
+
+        <Row className="view-footer m-0 g-0">
+          <NavbarFooter />
+        </Row>
       </Container>
     </div>
   );

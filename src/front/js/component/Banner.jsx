@@ -4,7 +4,7 @@ import imagen from '../../img/WebBanner01_GTID.jpg';
 
 const ContactBanner = () => {
   return (
-    <div className="contact-banner">
+    <div className="banner-img">
       <img src={imagen} alt="Banner Publicitario" />
     </div>
   );

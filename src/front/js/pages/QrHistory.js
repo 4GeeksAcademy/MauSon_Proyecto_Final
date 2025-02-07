@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Container, Row, Col } from "react-bootstrap"; // Usamos react-bootstrap para el layout
 import NavbarHeader from "../component/NavbarHeader.jsx";
-import UserQrCard from "../component/UserQrCard.jsx"; // Importa el componente UserQrCard
-import ContactBanner from "../component/ContactBanner.jsx";
+import UserQrCard from "../component/UserQrCard.jsx";
+import ContactBanner from "../component/Banner.jsx";
 import NavbarFooter from "../component/NavbarFooter.jsx";
 import "../../styles/qrView/qrhistory.css";
 
@@ -12,27 +13,43 @@ const QrHistory = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Asegúrate de que los qr_codes estén cargados
+  // Cargar los códigos QR si están vacíos
   useEffect(() => {
-    if (!store.qr_codes) {
-      actions.loadQrCodes(); // Cargar los códigos QR si no están disponibles en el store
+    console.log("Ejecutando useEffect para cargar QR codes...");
+    console.log("user.id:", store.user?.id); 
+
+    if (store.qr_codes.length === 0) {
+      actions.loadQrCodes();
     }
-  }, [store.qr_codes]);
+  }, [store.qr_codes, actions]);
 
   // Función para ver más detalles del código QR
   const handleVerContacto = (id) => {
     navigate(`/qr-details/${id}`);
   };
 
-  return (
-    <div className="qr-history-container">
-      <NavbarHeader prevLocation={location.state?.from} />
-      <div className="qr-history-content">
-        <h1>Historial de Códigos QR</h1>
-        <p>Esta es la página del historial de códigos QR</p>
+  const handleDeleteQR = (id) => {
+    console.log(`Borrar QR con ID: ${id}`);
+    actions.deleteQrCode(id);
+  };
 
-        {/* Mapeamos los qr_codes y mostramos las tarjetas UserQrCard */}
-        <ul className="list-group">
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear()).slice(2, 4); // Solo los dos últimos dígitos del año
+    return `${day}/${month}/${year}`;
+  };
+
+  return (
+    <div className="view-container">
+      <Container fluid className="d-flex flex-column p-0 m-0 H-100">
+
+        <Row className="view-header sticky-top g-0">
+          <NavbarHeader prevLocation={location.state?.from} />
+        </Row>
+
+        <Row className="view-body g-0">
           {store.qr_codes && store.qr_codes.length > 0 ? (
             store.qr_codes.map((qrCode) => (
               <UserQrCard
@@ -42,15 +59,22 @@ const QrHistory = () => {
                 fecha_inicio={qrCode.fecha_inicio}
                 fecha_fin={qrCode.fecha_fin}
                 verContacto={handleVerContacto}
+                borrarQR={handleDeleteQR}
               />
             ))
           ) : (
             <p>No se encontraron códigos QR.</p>
           )}
-        </ul>
-      </div>
-      <ContactBanner />
-      <NavbarFooter />
+        </Row>
+
+        <Row className="view-banner m-0 g-0">
+          <ContactBanner />
+        </Row>
+
+        <Row className="view-footer m-0 g-0">
+          <NavbarFooter />
+        </Row>
+      </Container>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import "../../styles/userContactForm.css";
+import "../../styles/userView/formPersonal.css";
 
 const UserContactForm = ({ contactData, setContactForm, isEditing }) => {
   const handleChange = (e) => {
